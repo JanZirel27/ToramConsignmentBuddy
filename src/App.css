@@ -489,7 +489,7 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpPWAMobile {
   0% {
-    transform: translate(-50%, -50%) translateX(-3px);
+    transform: translate(-50%, -50%) translateX(-10px);
     opacity: 0;
   }
   50% {
@@ -514,7 +514,6 @@ input[type=number] {
 @media (display-mode: standalone) and (max-width: 768px) {
   .main-title {
     font-size: 2.5rem !important;
-    transform: translate(-50%, -50%) translateX(-5px) !important;
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
@@ -524,7 +523,6 @@ body.pwa-mode .main-title,
 .main-title.pwa-mode-title,
 body.pwa-mode .App .main-title {
   font-size: 2.5rem !important;
-  transform: translate(-50%, -50%) translateX(-3px) !important;
   animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
 }
 
@@ -532,7 +530,6 @@ body.pwa-mode .App .main-title {
 @media (max-width: 768px) {
   body.pwa-mode .main-title,
   .main-title.pwa-mode-title {
-    transform: translate(-50%, -50%) translateX(-3px) !important;
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
