@@ -489,7 +489,7 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpPWAMobile {
   0% {
-    transform: translate(-50%, -50%) translateX(-10px);
+    transform: translate(-50%, -50%) translateX(-5px);
     opacity: 0;
   }
   50% {
@@ -503,7 +503,7 @@ input[type=number] {
 }
 
 @media (max-width: 768px) {
-  .main-title {
+  .main-title:not(.pwa-mode-title) {
     font-size: 2.5rem;
     transform: translate(-50%, -50%) translateX(-30px);
     animation: slideInAndMoveUpMobile 2s ease-out forwards;
@@ -513,15 +513,26 @@ input[type=number] {
 /* PWA-specific fixes for standalone mode - mobile only */
 @media (display-mode: standalone) and (max-width: 768px) {
   .main-title {
-    transform: translate(-50%, -50%) translateX(-10px);
-    animation: slideInAndMoveUpPWAMobile 2s ease-out forwards;
+    font-size: 2.5rem !important;
+    transform: translate(-50%, -50%) translateX(-5px) !important;
+    animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
 
-/* Additional PWA body class targeting - mobile only */
-.pwa-mode .main-title {
-  transform: translate(-50%, -50%) translateX(-10px);
-  animation: slideInAndMoveUpPWAMobile 2s ease-out forwards;
+/* Additional PWA body class targeting - mobile only with higher specificity */
+.pwa-mode .main-title,
+.main-title.pwa-mode-title {
+  font-size: 2.5rem !important;
+  transform: translate(-50%, -50%) translateX(-5px) !important;
+  animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
+}
+
+/* Override mobile styles specifically for PWA mode */
+@media (max-width: 768px) {
+  .main-title.pwa-mode-title {
+    transform: translate(-50%, -50%) translateX(-5px) !important;
+    animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
+  }
 }
   
   .main-title.float-to-corner {

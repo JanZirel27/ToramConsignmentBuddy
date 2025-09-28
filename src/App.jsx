@@ -63,8 +63,16 @@ function App() {
       
       // Add class to body for CSS targeting - only for mobile PWA
       document.body.classList.remove('pwa-mode')
+      const titleElement = document.querySelector('.main-title')
+      if (titleElement) {
+        titleElement.classList.remove('pwa-mode-title')
+      }
+      
       if (isPWAMode) {
         document.body.classList.add('pwa-mode')
+        if (titleElement) {
+          titleElement.classList.add('pwa-mode-title')
+        }
       }
     }
     
