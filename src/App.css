@@ -523,6 +523,7 @@ body.pwa-mode .main-title,
 .main-title.pwa-mode-title,
 body.pwa-mode .App .main-title {
   font-size: 2.5rem !important;
+  transform: translate(-50%, -50%) !important;
   animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
 }
 
@@ -530,6 +531,7 @@ body.pwa-mode .App .main-title {
 @media (max-width: 768px) {
   body.pwa-mode .main-title,
   .main-title.pwa-mode-title {
+    transform: translate(-50%, -50%) !important;
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
