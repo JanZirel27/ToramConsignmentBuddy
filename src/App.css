@@ -489,11 +489,11 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpPWAMobile {
   0% {
-    transform: translate(-50%, -50%) translateX(-10px);
+    transform: translate(-50%, -50%) scale(0.98);
     opacity: 0;
   }
   50% {
-    transform: translate(-50%, -50%) translateX(0);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
   100% {
