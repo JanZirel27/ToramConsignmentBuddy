@@ -12,6 +12,7 @@ function App() {
   const [isCopied, setIsCopied] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstallButton, setShowInstallButton] = useState(false)
+  const [isPWA, setIsPWA] = useState(false)
 
   // Format number with commas
   const formatNumberWithCommas = (num) => {
@@ -50,6 +51,31 @@ function App() {
       setConsignmentPrice('')
     }
   }, [desiredBoardPrice, taxValue])
+
+  // Detect PWA mode
+  useEffect(() => {
+    const detectPWA = () => {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      const isIOSStandalone = window.navigator.standalone === true
+      const isPWAMode = isStandalone || isIOSStandalone
+      setIsPWA(isPWAMode)
+      
+      // Add class to body for CSS targeting
+      if (isPWAMode) {
+        document.body.classList.add('pwa-mode')
+      }
+    }
+    
+    detectPWA()
+    
+    // Listen for changes in display mode
+    const mediaQuery = window.matchMedia('(display-mode: standalone)')
+    mediaQuery.addListener(detectPWA)
+    
+    return () => {
+      mediaQuery.removeListener(detectPWA)
+    }
+  }, [])
 
   // PWA Install functionality
   useEffect(() => {

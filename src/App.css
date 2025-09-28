@@ -472,12 +472,65 @@ input[type=number] {
   }
 }
 
+@keyframes slideInAndMoveUpPWA {
+  0% {
+    transform: translate(-50%, -50%) translateX(-15px);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-50px);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInAndMoveUpPWAMobile {
+  0% {
+    transform: translate(-50%, -50%) translateX(-10px);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-50px);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
   .main-title {
     font-size: 2.5rem;
     transform: translate(-50%, -50%) translateX(-30px);
     animation: slideInAndMoveUpMobile 2s ease-out forwards;
   }
+}
+
+/* PWA-specific fixes for standalone mode */
+@media (display-mode: standalone) {
+  .main-title {
+    transform: translate(-50%, -50%) translateX(-15px) !important;
+    animation: slideInAndMoveUpPWA 2s ease-out forwards !important;
+  }
+}
+
+/* Additional PWA body class targeting */
+.pwa-mode .main-title {
+  transform: translate(-50%, -50%) translateX(-15px) !important;
+  animation: slideInAndMoveUpPWA 2s ease-out forwards !important;
+}
+
+/* Extra safe PWA targeting for mobile */
+@media (display-mode: standalone) and (max-width: 768px) {
+  .main-title {
+    transform: translate(-50%, -50%) translateX(-10px) !important;
+    animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
+  }
+}
   
   .main-title.float-to-corner {
     font-size: 2.5rem;
@@ -560,4 +613,3 @@ input[type=number] {
     padding: 0.5rem 0.8rem;
     border-radius: 20px;
   }
-}
