@@ -92,7 +92,6 @@
 
 .main-title.float-to-corner {
   font-size: 4rem;
-  text-align: left;
   animation: floatToCorner 0.8s ease-out forwards;
   opacity: 1;
   z-index: 1000;
@@ -456,11 +455,13 @@ input[type=number] {
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%) translateX(0) translateY(-50px);
+    text-align: center;
   }
   100% {
     top: 2rem;
     left: 2rem;
     transform: translate(0, 0);
+    text-align: left;
   }
 }
 
