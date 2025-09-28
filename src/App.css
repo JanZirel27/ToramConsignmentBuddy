@@ -98,6 +98,13 @@
   z-index: 1000;
 }
 
+/* Mobile float-to-corner adjustment */
+@media (max-width: 768px) {
+  .main-title.float-to-corner {
+    font-size: 2.5rem;
+  }
+}
+
 .price-calculator {
   position: absolute;
   top: 50%;
@@ -535,12 +542,6 @@ body.pwa-mode .App .main-title {
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
-  
-  .main-title.float-to-corner {
-    font-size: 2.5rem;
-    top: 1rem;
-    left: 1rem;
-  }
   
   .price-calculator {
     gap: 1.5rem;
