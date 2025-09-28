@@ -108,7 +108,8 @@
 @media (max-width: 768px) {
   .main-title.float-to-corner {
     font-size: 2.5rem;
-    animation: floatToTopCenter 0.8s ease-out forwards;
+    animation: floatToTopCenter 0.8s ease-out forwards !important;
+    text-align: center !important;
   }
 }
 
