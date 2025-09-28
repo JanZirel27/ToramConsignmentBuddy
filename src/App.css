@@ -510,26 +510,18 @@ input[type=number] {
   }
 }
 
-/* PWA-specific fixes for standalone mode */
-@media (display-mode: standalone) {
-  .main-title {
-    transform: translate(-50%, -50%) translateX(-15px) !important;
-    animation: slideInAndMoveUpPWA 2s ease-out forwards !important;
-  }
-}
-
-/* Additional PWA body class targeting */
-.pwa-mode .main-title {
-  transform: translate(-50%, -50%) translateX(-15px) !important;
-  animation: slideInAndMoveUpPWA 2s ease-out forwards !important;
-}
-
-/* Extra safe PWA targeting for mobile */
+/* PWA-specific fixes for standalone mode - mobile only */
 @media (display-mode: standalone) and (max-width: 768px) {
   .main-title {
-    transform: translate(-50%, -50%) translateX(-10px) !important;
-    animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
+    transform: translate(-50%, -50%) translateX(-10px);
+    animation: slideInAndMoveUpPWAMobile 2s ease-out forwards;
   }
+}
+
+/* Additional PWA body class targeting - mobile only */
+.pwa-mode .main-title {
+  transform: translate(-50%, -50%) translateX(-10px);
+  animation: slideInAndMoveUpPWAMobile 2s ease-out forwards;
 }
   
   .main-title.float-to-corner {

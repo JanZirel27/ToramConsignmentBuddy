@@ -57,10 +57,12 @@ function App() {
     const detectPWA = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches
       const isIOSStandalone = window.navigator.standalone === true
-      const isPWAMode = isStandalone || isIOSStandalone
+      const isMobile = window.matchMedia('(max-width: 768px)').matches
+      const isPWAMode = (isStandalone || isIOSStandalone) && isMobile
       setIsPWA(isPWAMode)
       
-      // Add class to body for CSS targeting
+      // Add class to body for CSS targeting - only for mobile PWA
+      document.body.classList.remove('pwa-mode')
       if (isPWAMode) {
         document.body.classList.add('pwa-mode')
       }
@@ -68,12 +70,16 @@ function App() {
     
     detectPWA()
     
-    // Listen for changes in display mode
+    // Listen for changes in display mode and screen size
     const mediaQuery = window.matchMedia('(display-mode: standalone)')
+    const mobileQuery = window.matchMedia('(max-width: 768px)')
+    
     mediaQuery.addListener(detectPWA)
+    mobileQuery.addListener(detectPWA)
     
     return () => {
       mediaQuery.removeListener(detectPWA)
+      mobileQuery.removeListener(detectPWA)
     }
   }, [])
 
