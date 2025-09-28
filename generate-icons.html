@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PWA Icons</title>
+</head>
+<body>
+    <h2>Generate PWA Icons</h2>
+    <p>Instructions:</p>
+    <ol>
+        <li>Open this file in a browser</li>
+        <li>Right-click each canvas and "Save image as..."</li>
+        <li>Save as: pwa-192x192.png, pwa-512x512.png, apple-touch-icon.png</li>
+        <li>Place the images in the public/ folder</li>
+    </ol>
+    
+    <h3>192x192 Icon:</h3>
+    <canvas id="canvas192" width="192" height="192" style="border: 1px solid #ccc;"></canvas>
+    
+    <h3>512x512 Icon:</h3>
+    <canvas id="canvas512" width="512" height="512" style="border: 1px solid #ccc;"></canvas>
+    
+    <h3>Apple Touch Icon (180x180):</h3>
+    <canvas id="canvasApple" width="180" height="180" style="border: 1px solid #ccc;"></canvas>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#1a2344');
+            gradient.addColorStop(0.5, '#2d4a7a');
+            gradient.addColorStop(1, '#1a2344');
+            
+            // Draw background with rounded corners
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, size * 0.125);
+            ctx.fill();
+            
+            // Draw gold border
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = size * 0.03;
+            ctx.beginPath();
+            ctx.roundRect(size * 0.02, size * 0.02, size * 0.96, size * 0.96, size * 0.11);
+            ctx.stroke();
+            
+            // Draw stylized CS letters
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = size * 0.024;
+            ctx.lineCap = 'round';
+            
+            // Letter C
+            ctx.beginPath();
+            const cX = size * 0.25;
+            const cY = size * 0.35;
+            const cSize = size * 0.15;
+            ctx.arc(cX + cSize/2, cY + cSize/2, cSize/2, Math.PI * 0.5, Math.PI * 1.5);
+            ctx.stroke();
+            
+            // Letter S
+            const sX = size * 0.55;
+            const sY = size * 0.35;
+            const sSize = size * 0.15;
+            ctx.beginPath();
+            ctx.arc(sX + sSize/2, sY + sSize/4, sSize/4, Math.PI * 1.5, Math.PI * 0.5);
+            ctx.arc(sX + sSize/2, sY + 3*sSize/4, sSize/4, Math.PI * 0.5, Math.PI * 1.5);
+            ctx.stroke();
+            
+            // Decorative dots
+            ctx.fillStyle = '#d4af37';
+            const dotSize = size * 0.015;
+            ctx.beginPath();
+            ctx.arc(size * 0.25, size * 0.75, dotSize, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(size * 0.75, size * 0.25, dotSize, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(size * 0.75, size * 0.75, dotSize, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Polyfill for roundRect if not available
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+                this.moveTo(x + radius, y);
+                this.lineTo(x + width - radius, y);
+                this.quadraticCurveTo(x + width, y, x + width, y + radius);
+                this.lineTo(x + width, y + height - radius);
+                this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                this.lineTo(x + radius, y + height);
+                this.quadraticCurveTo(x, y + height, x, y + height - radius);
+                this.lineTo(x, y + radius);
+                this.quadraticCurveTo(x, y, x + radius, y);
+            };
+        }
+        
+        // Generate all icons
+        drawIcon(document.getElementById('canvas192'), 192);
+        drawIcon(document.getElementById('canvas512'), 512);
+        drawIcon(document.getElementById('canvas180'), 180);
+    </script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
+
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a2344 0%, #2d4a7a 50%, #1a2344 100%);
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.install-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(145deg, #4caf50, #2e7d32); /* Green gradient */
+  border: 2px solid #4caf50;
+  border-radius: 25px; /* Rounded pill shape */
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+.install-button:hover {
+  background: linear-gradient(145deg, #66bb6a, #4caf50);
+  border-color: #66bb6a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.install-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  transition: all 0.5s ease-out;
+  padding-top: 4rem;
+}
+
+.content-container.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.main-title {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #d4af37;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.8s ease-out;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateX(-100px);
+  animation: slideInAndMoveUp 2s ease-out forwards;
+}
+
+.main-title.float-to-corner {
+  font-size: 4rem;
+  text-align: left;
+  animation: floatToCorner 0.8s ease-out forwards;
+  opacity: 1;
+  z-index: 1000;
+}
+
+.price-calculator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(20px);
+  transition: all 0.8s ease-out;
+  z-index: 1000;
+  pointer-events: none;
+  background: linear-gradient(145deg, rgba(26, 35, 68, 0.95), rgba(45, 74, 122, 0.95));
+  border: 2px solid #d4af37;
+  border-radius: 15px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+              0 0 20px rgba(212, 175, 55, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.price-calculator.fade-in {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+  pointer-events: auto;
+}
+
+.tax-display {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #d4af37;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.price-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.price-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.price-input-group label {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e6d7b8;
+  text-align: left;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.price-input {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #1a2344;
+  padding: 0.75rem 30px 0.75rem 1rem;
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  background: linear-gradient(145deg, #f8f6f0, #ffffff);
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.currency-symbol {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666666;
+  font-size: 1.2rem;
+  font-weight: 400;
+  pointer-events: none;
+  user-select: none;
+}
+
+.price-input.readonly {
+  background: #f8f8f8;
+  color: #666666;
+  cursor: default;
+}
+
+.price-input.readonly:focus {
+  border-color: #e0e0e0;
+  box-shadow: none;
+}
+
+.price-input:focus {
+  border-color: #b8941f;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3), 
+              inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #ffffff, #f8f6f0);
+}
+
+/* Remove spinner arrows for any remaining number inputs */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.copy-button {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a2344;
+  background: linear-gradient(145deg, #d4af37, #b8941f);
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  min-height: 3rem;
+  height: 3rem; /* Explicit fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2; /* Consistent line height */
+}
+
+.copy-button:hover:not(:disabled) {
+  background: linear-gradient(145deg, #e6c547, #d4af37);
+  border-color: #e6c547;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.copy-button:active {
+  transform: translateY(0);
+}
+
+.copy-button:disabled {
+  background: #cccccc;
+  border-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.copy-button.copied {
+  background: linear-gradient(145deg, #4caf50, #2e7d32);
+  border-color: #4caf50;
+  transform: translateY(-1px);
+  color: #ffffff;
+}
+
+.copy-button.copied:hover {
+  background: linear-gradient(145deg, #4caf50, #2e7d32);
+  border-color: #4caf50;
+}
+
+.second-title {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: #e6d7b8;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.02em;
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+}
+
+.second-title.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.input-container {
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.input-container.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.stepper-button {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #333333;
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.stepper-button:first-child {
+  border-radius: 8px 0 0 8px;
+  border-right: none;
+}
+
+.stepper-button:last-child {
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+}
+
+.stepper-button:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #333333;
+}
+
+.stepper-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.tax-input {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: #333333;
+  text-align: center;
+  width: 120px;
+  height: 50px;
+  padding: 0 30px 0 0;
+  border: 2px solid #e0e0e0;
+  border-left: none;
+  border-right: none;
+  background: #ffffff;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.percentage-symbol {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666666;
+  font-size: 1.5rem;
+  font-weight: 300;
+  pointer-events: none;
+  user-select: none;
+}
+
+.tax-input:focus {
+  border-color: #333333;
+  box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+}
+
+.tax-input::-webkit-outer-spin-button,
+.tax-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tax-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.confirm-button {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: #333333;
+  border: 2px solid #333333;
+  border-radius: 8px;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-button:hover {
+  background: #555555;
+  border-color: #555555;
+  transform: translateY(-1px);
+}
+
+.confirm-button:active {
+  transform: translateY(0);
+}
+
+@keyframes slideInAndMoveUp {
+  0% {
+    transform: translate(-50%, -50%) translateX(-100px);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateX(0) translateY(-50px);
+    opacity: 1;
+  }
+}
+
+@keyframes floatToCorner {
+  0% {
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateX(0) translateY(-50px);
+  }
+  100% {
+    top: 2rem;
+    left: 2rem;
+    transform: translate(0, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 2.5rem;
+  }
+  
+  .main-title.float-to-corner {
+    font-size: 2.5rem;
+    top: 1rem;
+    left: 1rem;
+  }
+  
+  .price-calculator {
+    gap: 1.5rem;
+    width: 340px; /* Fixed width for better spacing */
+    max-width: calc(100vw - 2rem); /* Responsive max-width with margins */
+    padding: 2.5rem 2rem; /* More generous padding */
+    box-sizing: border-box;
+  }
+  
+  .tax-display {
+    font-size: 1.2rem;
+  }
+  
+  .price-inputs {
+    gap: 1rem;
+    max-width: 280px; /* Expand input container */
+  }
+  
+  .price-input-group label {
+    font-size: 0.9rem;
+  }
+  
+  .price-input {
+    font-size: 1rem;
+    padding: 0.6rem 25px 0.6rem 0.8rem;
+  }
+  
+  .currency-symbol {
+    font-size: 1rem;
+    right: 8px;
+  }
+  
+  .copy-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    min-height: 2.6rem;
+    height: 2.6rem; /* Explicit fixed height for mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2; /* Consistent line height */
+  }
+  
+  .second-title {
+    font-size: 1.5rem;
+  }
+  
+  .tax-input {
+    font-size: 1.5rem;
+    width: 100px;
+    padding: 0 25px 0 0;
+  }
+  
+  .percentage-symbol {
+    font-size: 1.2rem;
+    right: 8px;
+  }
+  
+  .stepper-button {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+  
+  .confirm-button {
+    font-size: 1.1rem;
+    padding: 0.6rem 1.5rem;
+  }
+  
+  .install-button {
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 20px;
+  }
+}
