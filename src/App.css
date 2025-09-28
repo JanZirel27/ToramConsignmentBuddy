@@ -519,16 +519,16 @@ input[type=number] {
 
 /* PWA-specific fixes for standalone mode - mobile only */
 @media (display-mode: standalone) and (max-width: 768px) {
-  .main-title {
+  .main-title:not(.float-to-corner) {
     font-size: 2.5rem !important;
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
 
 /* High specificity PWA override - targets body.pwa-mode for maximum priority */
-body.pwa-mode .main-title,
-.main-title.pwa-mode-title,
-body.pwa-mode .App .main-title {
+body.pwa-mode .main-title:not(.float-to-corner),
+.main-title.pwa-mode-title:not(.float-to-corner),
+body.pwa-mode .App .main-title:not(.float-to-corner) {
   font-size: 2.5rem !important;
   transform: translate(-50%, -50%) !important;
   animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
@@ -536,8 +536,8 @@ body.pwa-mode .App .main-title {
 
 /* Ultra-specific mobile PWA override */
 @media (max-width: 768px) {
-  body.pwa-mode .main-title,
-  .main-title.pwa-mode-title {
+  body.pwa-mode .main-title:not(.float-to-corner),
+  .main-title.pwa-mode-title:not(.float-to-corner) {
     transform: translate(-50%, -50%) !important;
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
