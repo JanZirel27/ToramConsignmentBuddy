@@ -92,15 +92,23 @@
 
 .main-title.float-to-corner {
   font-size: 4rem;
-  animation: floatToCorner 0.8s ease-out forwards;
+  animation: floatToCorner 0.8s ease-out forwards, textAlignDelay 0.8s ease-out forwards;
   opacity: 1;
   z-index: 1000;
+}
+
+/* Desktop-only text alignment change */
+@media (min-width: 769px) {
+  .main-title.float-to-corner {
+    animation: floatToCorner 0.8s ease-out forwards, textAlignDelay 0.8s ease-out forwards;
+  }
 }
 
 /* Mobile float-to-corner adjustment */
 @media (max-width: 768px) {
   .main-title.float-to-corner {
     font-size: 2.5rem;
+    animation: floatToTopCenter 0.8s ease-out forwards;
   }
 }
 
@@ -455,12 +463,35 @@ input[type=number] {
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%) translateX(0) translateY(-50px);
-    text-align: center;
   }
   100% {
     top: 2rem;
     left: 2rem;
     transform: translate(0, 0);
+  }
+}
+
+@keyframes floatToTopCenter {
+  0% {
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateX(0) translateY(-50px);
+  }
+  100% {
+    top: 1.5rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes textAlignDelay {
+  0% {
+    text-align: center;
+  }
+  99% {
+    text-align: center;
+  }
+  100% {
     text-align: left;
   }
 }
