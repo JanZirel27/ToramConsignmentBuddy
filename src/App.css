@@ -459,7 +459,7 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpMobile {
   0% {
-    transform: translate(-50%, -50%) translateX(-30px);
+    transform: translate(-50%, -50%) translateX(-15px);
     opacity: 0;
   }
   50% {
@@ -489,7 +489,7 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpPWAMobile {
   0% {
-    transform: translate(-50%, -50%) translateX(-5px);
+    transform: translate(-50%, -50%) translateX(-3px);
     opacity: 0;
   }
   50% {
@@ -503,9 +503,9 @@ input[type=number] {
 }
 
 @media (max-width: 768px) {
-  .main-title:not(.pwa-mode-title) {
+  .main-title {
     font-size: 2.5rem;
-    transform: translate(-50%, -50%) translateX(-30px);
+    transform: translate(-50%, -50%) translateX(-15px);
     animation: slideInAndMoveUpMobile 2s ease-out forwards;
   }
 }
@@ -519,18 +519,20 @@ input[type=number] {
   }
 }
 
-/* Additional PWA body class targeting - mobile only with higher specificity */
-.pwa-mode .main-title,
-.main-title.pwa-mode-title {
+/* High specificity PWA override - targets body.pwa-mode for maximum priority */
+body.pwa-mode .main-title,
+.main-title.pwa-mode-title,
+body.pwa-mode .App .main-title {
   font-size: 2.5rem !important;
-  transform: translate(-50%, -50%) translateX(-5px) !important;
+  transform: translate(-50%, -50%) translateX(-3px) !important;
   animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
 }
 
-/* Override mobile styles specifically for PWA mode */
+/* Ultra-specific mobile PWA override */
 @media (max-width: 768px) {
+  body.pwa-mode .main-title,
   .main-title.pwa-mode-title {
-    transform: translate(-50%, -50%) translateX(-5px) !important;
+    transform: translate(-50%, -50%) translateX(-3px) !important;
     animation: slideInAndMoveUpPWAMobile 2s ease-out forwards !important;
   }
 }
