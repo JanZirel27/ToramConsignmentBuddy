@@ -459,7 +459,7 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpMobile {
   0% {
-    transform: translate(-50%, -50%) translateX(-15px);
+    transform: translate(-50%, -50%) translateX(-8px);
     opacity: 0;
   }
   50% {
@@ -489,11 +489,11 @@ input[type=number] {
 
 @keyframes slideInAndMoveUpPWAMobile {
   0% {
-    transform: translate(-50%, -50%) scale(0.98);
+    transform: translate(-50%, -50%) scale(0.9) translateY(10px);
     opacity: 0;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1) translateY(0);
     opacity: 1;
   }
   100% {
@@ -505,7 +505,7 @@ input[type=number] {
 @media (max-width: 768px) {
   .main-title {
     font-size: 2.5rem;
-    transform: translate(-50%, -50%) translateX(-15px);
+    transform: translate(-50%, -50%) translateX(-8px);
     animation: slideInAndMoveUpMobile 2s ease-out forwards;
   }
 }
