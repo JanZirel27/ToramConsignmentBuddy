@@ -228,6 +228,11 @@
   background: linear-gradient(145deg, #ffffff, #f8f6f0);
 }
 
+/* Hide placeholder on focus for Desired Board Price input */
+#desired-board-price:focus::placeholder {
+  opacity: 0;
+}
+
 /* Remove spinner arrows for any remaining number inputs */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
