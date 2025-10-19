@@ -43,8 +43,8 @@ function App() {
       const dbp = parseFloat(rawDesiredPrice)
       const taxDecimal = taxValue / 100
       const calculatedPrice = dbp / (1 + taxDecimal)
-      // Round down to the nearest whole number
-      const roundedPrice = Math.floor(calculatedPrice)
+      // Round up to the nearest whole number
+      const roundedPrice = Math.ceil(calculatedPrice)
       // Format with commas
       setConsignmentPrice(formatNumberWithCommas(roundedPrice))
     } else {
