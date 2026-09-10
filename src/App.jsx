@@ -29,7 +29,16 @@ function App() {
   }
 
   const sanitizePriceInput = (value) => {
-    const rawValue = removeCommas(value)
+    let rawValue = removeCommas(value)
+
+    // Expand trailing k/m: 2.1m → 2100000, 5k → 5000
+    const suffixMatch = rawValue.match(/^(\d*\.?\d+)([kKmM])$/)
+    if (suffixMatch) {
+      const base = parseFloat(suffixMatch[1])
+      const multiplier = suffixMatch[2].toLowerCase() === 'm' ? 1_000_000 : 1_000
+      rawValue = String(Math.round(base * multiplier))
+    }
+
     if (rawValue === '' || /^\d*\.?\d*$/.test(rawValue)) {
       return rawValue ? formatNumberWithCommas(rawValue) : ''
     }
