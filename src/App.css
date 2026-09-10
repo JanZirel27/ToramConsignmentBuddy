@@ -228,8 +228,9 @@
   background: linear-gradient(145deg, #ffffff, #f8f6f0);
 }
 
-/* Hide placeholder on focus for Desired Board Price input */
-#desired-board-price:focus::placeholder {
+/* Hide placeholder on focus for editable price inputs */
+#desired-board-price:focus::placeholder,
+#earnings:focus::placeholder {
   opacity: 0;
 }
 
@@ -245,57 +246,100 @@ input[type=number] {
 }
 
 .copy-button {
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #1a2344;
-  background: linear-gradient(145deg, #d4af37, #b8941f);
-  border: 2px solid #d4af37;
-  border-radius: 8px;
-  padding: 0.6rem 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  min-height: 3rem;
-  height: 3rem; /* Explicit fixed height */
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.2; /* Consistent line height */
+  width: auto;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-right: 1px solid rgba(184, 148, 31, 0.55);
+  border-radius: 6px 0 0 6px;
+  background: linear-gradient(145deg, #d4af37, #b8941f);
+  color: #1a2344;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
 .copy-button:hover:not(:disabled) {
   background: linear-gradient(145deg, #e6c547, #d4af37);
-  border-color: #e6c547;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-.copy-button:active {
-  transform: translateY(0);
+.copy-button:active:not(:disabled) {
+  background: linear-gradient(145deg, #b8941f, #a07f15);
 }
 
 .copy-button:disabled {
   background: #cccccc;
-  border-color: #cccccc;
+  border-right-color: #bbbbbb;
+  color: #888888;
   cursor: not-allowed;
-  transform: none;
 }
 
 .copy-button.copied {
   background: linear-gradient(145deg, #4caf50, #2e7d32);
-  border-color: #4caf50;
-  transform: translateY(-1px);
+  border-right-color: #2e7d32;
   color: #ffffff;
 }
 
 .copy-button.copied:hover {
   background: linear-gradient(145deg, #4caf50, #2e7d32);
-  border-color: #4caf50;
+  border-right-color: #2e7d32;
+}
+
+.copy-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  fill: currentColor;
+  display: block;
+}
+
+/* Same padding as other price fields so the value shares their center line */
+.price-input.has-copy-button {
+  padding: 0.75rem 30px 0.75rem 1rem;
+}
+
+.copy-alert {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 0.35rem);
+  transform: translateX(-50%);
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #81c784;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.copy-alert.show {
+  animation: copy-alert-fade 2s ease forwards;
+}
+
+@keyframes copy-alert-fade {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  15%,
+  55% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-2px);
+  }
 }
 
 .second-title {
@@ -615,16 +659,24 @@ body.pwa-mode .App .main-title:not(.float-to-corner) {
     font-size: 1rem;
     right: 8px;
   }
-  
+
   .copy-button {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
-    min-height: 2.6rem;
-    height: 2.6rem; /* Explicit fixed height for mobile */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.2; /* Consistent line height */
+    left: 2px;
+    top: 2px;
+    bottom: 2px;
+  }
+
+  .copy-icon {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .price-input.has-copy-button {
+    padding: 0.6rem 25px 0.6rem 0.8rem;
+  }
+
+  .copy-alert {
+    font-size: 0.7rem;
   }
   
   .second-title {

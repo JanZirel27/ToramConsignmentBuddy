@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -9,7 +9,11 @@ function App() {
   const [showTaxDisplay, setShowTaxDisplay] = useState(false)
   const [desiredBoardPrice, setDesiredBoardPrice] = useState('')
   const [consignmentPrice, setConsignmentPrice] = useState('')
+  const [earnings, setEarnings] = useState('')
+  const [priceInputSource, setPriceInputSource] = useState('desired') // 'desired' | 'earnings'
   const [isCopied, setIsCopied] = useState(false)
+  const [copyAlertKey, setCopyAlertKey] = useState(0)
+  const copyResetTimeoutRef = useRef(null)
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstallButton, setShowInstallButton] = useState(false)
   const [isPWA, setIsPWA] = useState(false)
@@ -24,33 +28,108 @@ function App() {
     return value.replace(/,/g, '')
   }
 
-  const handleDesiredBoardPriceChange = (e) => {
-    const value = e.target.value
-    // Remove commas first to validate
+  const sanitizePriceInput = (value) => {
     const rawValue = removeCommas(value)
-    // Allow only numbers and decimal point
     if (rawValue === '' || /^\d*\.?\d*$/.test(rawValue)) {
-      // Store the raw value for calculations
-      const formattedValue = rawValue ? formatNumberWithCommas(rawValue) : ''
+      return rawValue ? formatNumberWithCommas(rawValue) : ''
+    }
+    return null
+  }
+
+  const calculateConsignmentFromDbp = (dbp) => {
+    const taxDecimal = taxValue / 100
+    return Math.ceil(dbp / (1 + taxDecimal))
+  }
+
+  const calculateEarningsFromConsignment = (cp) => {
+    return cp - Math.floor(cp / 10)
+  }
+
+  // Inverse of earnings = CP - floor(CP / 10). Prefer the largest matching CP.
+  const calculateConsignmentFromEarnings = (earningsValue) => {
+    const target = Math.floor(earningsValue)
+    let best = null
+
+    for (let r = 0; r <= 9; r++) {
+      if ((target - r) % 9 === 0) {
+        const q = (target - r) / 9
+        if (q >= 0) {
+          const cp = 10 * q + r
+          if (best === null || cp > best) best = cp
+        }
+      }
+    }
+
+    return best ?? Math.floor(target * 10 / 9)
+  }
+
+  // Pick a DBP that forward-maps to the given consignment price when possible.
+  const calculateDbpFromConsignment = (cp) => {
+    const taxDecimal = taxValue / 100
+    if (taxDecimal === 0) return cp
+
+    const maxDbp = Math.floor(cp * (1 + taxDecimal))
+    const minDbp = Math.floor((cp - 1) * (1 + taxDecimal)) + 1
+
+    for (let dbp = maxDbp; dbp >= minDbp; dbp--) {
+      if (calculateConsignmentFromDbp(dbp) === cp) return dbp
+    }
+
+    // If this CP can't be produced at the current tax, use the nearest forward-consistent pair.
+    return maxDbp
+  }
+
+  const handleDesiredBoardPriceChange = (e) => {
+    const formattedValue = sanitizePriceInput(e.target.value)
+    if (formattedValue !== null) {
+      setPriceInputSource('desired')
       setDesiredBoardPrice(formattedValue)
     }
   }
 
-  // Calculate consignment price whenever desired board price or tax value changes
+  const handleEarningsChange = (e) => {
+    const formattedValue = sanitizePriceInput(e.target.value)
+    if (formattedValue !== null) {
+      setPriceInputSource('earnings')
+      setEarnings(formattedValue)
+    }
+  }
+
+  // Keep DBP, consignment, and earnings in sync based on which field was last edited
   useEffect(() => {
-    const rawDesiredPrice = removeCommas(desiredBoardPrice)
-    if (rawDesiredPrice && !isNaN(rawDesiredPrice) && parseFloat(rawDesiredPrice) > 0) {
-      const dbp = parseFloat(rawDesiredPrice)
-      const taxDecimal = taxValue / 100
-      const calculatedPrice = dbp / (1 + taxDecimal)
-      // Round up to the nearest whole number
-      const roundedPrice = Math.ceil(calculatedPrice)
-      // Format with commas
-      setConsignmentPrice(formatNumberWithCommas(roundedPrice))
+    if (priceInputSource === 'desired') {
+      const rawDesiredPrice = removeCommas(desiredBoardPrice)
+      if (rawDesiredPrice && !isNaN(rawDesiredPrice) && parseFloat(rawDesiredPrice) > 0) {
+        const dbp = parseFloat(rawDesiredPrice)
+        const roundedPrice = calculateConsignmentFromDbp(dbp)
+        setConsignmentPrice(formatNumberWithCommas(roundedPrice))
+        setEarnings(formatNumberWithCommas(calculateEarningsFromConsignment(roundedPrice)))
+      } else {
+        setConsignmentPrice('')
+        setEarnings('')
+      }
+      return
+    }
+
+    const rawEarnings = removeCommas(earnings)
+    if (rawEarnings && !isNaN(rawEarnings) && parseFloat(rawEarnings) > 0) {
+      const earningsValue = parseFloat(rawEarnings)
+      // Earnings -> undo 10% fee -> CP -> undo tax -> DBP
+      const targetCp = calculateConsignmentFromEarnings(earningsValue)
+      const dbp = calculateDbpFromConsignment(targetCp)
+      const actualCp = calculateConsignmentFromDbp(dbp)
+      setDesiredBoardPrice(formatNumberWithCommas(dbp))
+      setConsignmentPrice(formatNumberWithCommas(actualCp))
+      // Keep all three fields consistent if tax makes the exact CP unreachable
+      const syncedEarnings = calculateEarningsFromConsignment(actualCp)
+      if (syncedEarnings !== Math.floor(earningsValue)) {
+        setEarnings(formatNumberWithCommas(syncedEarnings))
+      }
     } else {
+      setDesiredBoardPrice('')
       setConsignmentPrice('')
     }
-  }, [desiredBoardPrice, taxValue])
+  }, [desiredBoardPrice, earnings, taxValue, priceInputSource])
 
   // Detect PWA mode
   useEffect(() => {
@@ -152,13 +231,18 @@ function App() {
       const rawPrice = removeCommas(consignmentPrice)
       navigator.clipboard.writeText(rawPrice)
         .then(() => {
-          // Show feedback
+          if (copyResetTimeoutRef.current) {
+            clearTimeout(copyResetTimeoutRef.current)
+          }
+
+          // Remount alert so the fade animation restarts on repeat clicks
+          setCopyAlertKey((key) => key + 1)
           setIsCopied(true)
           console.log('Copied to clipboard:', rawPrice)
-          
-          // Reset feedback after 2 seconds
-          setTimeout(() => {
+
+          copyResetTimeoutRef.current = setTimeout(() => {
             setIsCopied(false)
+            copyResetTimeoutRef.current = null
           }, 2000)
         })
         .catch(err => {
@@ -253,23 +337,57 @@ function App() {
           <div className="price-input-group">
             <label htmlFor="consignment-price">Consignment Price</label>
             <div className="price-input-wrapper">
+              <button 
+                type="button"
+                className={`copy-button ${isCopied ? 'copied' : ''}`}
+                onClick={copyToClipboard}
+                disabled={!consignmentPrice}
+                title={isCopied ? 'Copied!' : 'Copy to clipboard'}
+                aria-label={isCopied ? 'Copied!' : 'Copy to clipboard'}
+              >
+                {isCopied ? (
+                  <svg className="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                ) : (
+                  <svg className="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                  </svg>
+                )}
+              </button>
               <input
                 id="consignment-price"
                 type="text"
                 value={consignmentPrice}
-                className="price-input readonly"
+                className="price-input readonly has-copy-button"
                 placeholder="0"
                 readOnly
               />
               <span className="currency-symbol">S</span>
+              <span
+                key={copyAlertKey}
+                className={`copy-alert ${isCopied ? 'show' : ''}`}
+                aria-live="polite"
+              >
+                Copied to clipboard!
+              </span>
             </div>
-            <button 
-              className={`copy-button ${isCopied ? 'copied' : ''}`}
-              onClick={copyToClipboard}
-              disabled={!consignmentPrice}
-            >
-              {isCopied ? 'Copied!' : 'Copy to Clipboard'}
-            </button>
+          </div>
+
+          <div className="price-input-group">
+            <label htmlFor="earnings">Earnings</label>
+            <div className="price-input-wrapper">
+              <input
+                id="earnings"
+                type="text"
+                inputMode="decimal"
+                value={earnings}
+                onChange={handleEarningsChange}
+                className="price-input"
+                placeholder="0"
+              />
+              <span className="currency-symbol">S</span>
+            </div>
           </div>
         </div>
       </div>
