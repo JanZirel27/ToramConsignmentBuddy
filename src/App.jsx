@@ -274,15 +274,15 @@ function App() {
   }
 
   useEffect(() => {
-    // Show second text after 2 seconds (when upward animation completes)
+    // Show second text after title intro completes
     const timer1 = setTimeout(() => {
       setShowSecondText(true)
-    }, 2000)
+    }, 1000)
 
-    // Show input after 3 seconds (1 second after second text appears)
+    // Show input shortly after second text appears
     const timer2 = setTimeout(() => {
       setShowInput(true)
-    }, 3000)
+    }, 1400)
 
     return () => {
       clearTimeout(timer1)
@@ -318,10 +318,10 @@ function App() {
     }
     setIsConfirmed(true)
     
-    // Show tax display after title animation completes (0.8s)
+    // Show tax display after title animation completes
     setTimeout(() => {
       setShowTaxDisplay(true)
-    }, 800)
+    }, 400)
   }
 
   return (
