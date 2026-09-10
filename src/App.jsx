@@ -4,7 +4,20 @@ import './App.css'
 function App() {
   const [showSecondText, setShowSecondText] = useState(false)
   const [showInput, setShowInput] = useState(false)
-  const [taxValue, setTaxValue] = useState(0)
+  const [taxValue, setTaxValue] = useState(() => {
+    try {
+      const saved = localStorage.getItem('consignmentBuddyTax')
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10)
+        if (!Number.isNaN(parsed) && parsed >= 0 && parsed <= 6) {
+          return parsed
+        }
+      }
+    } catch {
+      // Ignore storage access errors
+    }
+    return 0
+  })
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [showTaxDisplay, setShowTaxDisplay] = useState(false)
   const [desiredBoardPrice, setDesiredBoardPrice] = useState('')
@@ -298,6 +311,11 @@ function App() {
 
   const handleConfirm = () => {
     console.log('Tax value confirmed:', taxValue)
+    try {
+      localStorage.setItem('consignmentBuddyTax', String(taxValue))
+    } catch {
+      // Ignore storage access errors
+    }
     setIsConfirmed(true)
     
     // Show tax display after title animation completes (0.8s)
