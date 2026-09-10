@@ -49,6 +49,32 @@
   box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
+.developer-credit {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0.75rem;
+  z-index: 2000;
+  margin: 0;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(230, 215, 184, 0.75);
+  text-align: center;
+  pointer-events: none;
+}
+
+.developer-credit a {
+  color: #d4af37;
+  text-decoration: none;
+  pointer-events: auto;
+  font-weight: 600;
+}
+
+.developer-credit a:hover {
+  text-decoration: underline;
+}
+
 @keyframes slideInFromRight {
   0% {
     transform: translateX(100px);
@@ -742,4 +768,9 @@ body.pwa-mode .App .main-title:not(.float-to-corner) {
     font-size: 0.8rem;
     padding: 0.5rem 0.8rem;
     border-radius: 20px;
+  }
+
+  .developer-credit {
+    font-size: 0.7rem;
+    bottom: 0.5rem;
   }

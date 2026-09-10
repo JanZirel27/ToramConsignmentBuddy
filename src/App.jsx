@@ -460,6 +460,17 @@ function App() {
           </button>
         </div>
       </div>
+
+      <p className="developer-credit">
+        Developed by{' '}
+        <a
+          href="https://github.com/JanZirel27/ToramConsignmentBuddy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CozM1x
+        </a>
+      </p>
     </div>
   )
 }
